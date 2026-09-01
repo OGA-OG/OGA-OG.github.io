@@ -15,7 +15,7 @@
         body {
             background-color: black;
             font-family: 'Courier New', monospace;
-            color: #ffd700;
+            color: #1b1b1b;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -24,28 +24,29 @@
             text-align: center;
             padding: 10px;
             overflow-x: hidden;
+            position: relative;
         }
 
         /* ===== YELLOW STRIPS ===== */
         .top-strip, .bottom-strip {
             width: 100%;
-            height: 30px;
+            height: 25px;
             background-color: #ffd700;
             flex-shrink: 0;
+            position: relative;
+            z-index: 10;
         }
 
         .top-strip {
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            z-index: 10;
         }
 
         .top-strip span {
             color: black;
             font-weight: bold;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             letter-spacing: 8px;
             font-family: 'Courier New', monospace;
         }
@@ -57,19 +58,21 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 15px 10px;
-            max-width: 1200px;
+            padding: 10px;
+            max-width: 1000px;
             width: 100%;
+            position: relative;
+            z-index: 5;
         }
 
         /* ===== BIG QUESTION MARKS ===== */
         .big-title {
             color: #ffd700;
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: bold;
             letter-spacing: 15px;
             text-shadow: 0 0 30px #ffd700, 0 0 60px #ffd700;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             animation: glowPulse 1.5s infinite alternate;
             font-family: 'Courier New', monospace;
         }
@@ -82,19 +85,18 @@
         /* ===== FAT ASCII COUNTDOWN ===== */
         .ascii-countdown {
             color: #ffd700;
-            font-size: 14px;
-            line-height: 1.3;
+            font-size: 11px;
+            line-height: 1.2;
             white-space: pre;
             font-family: 'Courier New', monospace;
             text-shadow: 0 0 5px #ffd700;
             text-align: center;
-            margin: 5px 0;
+            margin: 3px 0;
             width: 100%;
             overflow-x: auto;
-            padding: 5px 0;
+            padding: 3px 0;
         }
 
-        /* ===== WAVE EFFECT - EACH ROW MOVES INDEPENDENTLY ===== */
         .ascii-countdown .row-0 { animation: waveRow 3s infinite ease-in-out; }
         .ascii-countdown .row-1 { animation: waveRow 3.2s infinite ease-in-out; }
         .ascii-countdown .row-2 { animation: waveRow 3.4s infinite ease-in-out; }
@@ -108,18 +110,18 @@
 
         @keyframes waveRow {
             0%, 100% { transform: translateX(0px); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
         }
 
         .ascii-message {
             color: #ffd700;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 1.6;
             white-space: pre;
             font-family: 'Courier New', monospace;
             text-shadow: 0 0 8px #ffd700;
-            margin-top: 10px;
+            margin-top: 5px;
             text-align: center;
             animation: msgFlicker 3s infinite;
         }
@@ -129,13 +131,13 @@
             50% { opacity: 1; text-shadow: 0 0 20px #ffd700; }
         }
 
-        /* ===== MUSIC PLAYER - NO BUTTONS ===== */
+        /* ===== MUSIC PLAYER - 3 SMALL BUTTONS ===== */
         .music-player {
-            margin-top: 20px;
+            margin-top: 15px;
             background: rgba(255, 215, 0, 0.05);
             border: 2px solid #ffd700;
             border-radius: 40px;
-            padding: 10px 25px;
+            padding: 8px 20px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -145,37 +147,98 @@
         }
 
         .music-player .status {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: bold;
             letter-spacing: 1px;
             color: #ffd700;
+            min-width: 80px;
+        }
+
+        .music-btn {
+            background: transparent;
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            border-radius: 30px;
+            padding: 4px 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+            min-width: 50px;
+        }
+
+        .music-btn:hover {
+            background: #ffd700;
+            color: black;
+            box-shadow: 0 0 25px #ffd700;
+            transform: scale(1.05);
+        }
+
+        .music-btn.active {
+            background: #ffd700;
+            color: black;
+            box-shadow: 0 0 25px #ffd700;
         }
 
         .music-player .track-info {
-            font-size: 0.8rem;
-            opacity: 0.7;
+            font-size: 0.7rem;
+            opacity: 0.6;
             color: #ffd700;
+            min-width: 60px;
+        }
+
+        /* ===== FLOATING ? MARKS ===== */
+        .float-question {
+            position: fixed;
+            color: #ffd700;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+            text-shadow: 0 0 20px #ffd700;
+            animation: floatUp 15s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.15;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* ===== RESPONSIVE ===== */
         @media (min-width: 1200px) {
-            .ascii-countdown { font-size: 18px; }
-            .big-title { font-size: 6rem; letter-spacing: 25px; }
-            .ascii-message { font-size: 18px; }
+            .ascii-countdown { font-size: 14px; }
+            .big-title { font-size: 5rem; letter-spacing: 20px; }
+            .ascii-message { font-size: 16px; }
         }
 
         @media (max-width: 700px) {
-            .ascii-countdown { font-size: 10px; }
-            .big-title { font-size: 2.8rem; letter-spacing: 10px; }
-            .ascii-message { font-size: 11px; }
-            .top-strip span { font-size: 1rem; letter-spacing: 4px; }
-            .top-strip, .bottom-strip { height: 25px; }
+            .ascii-countdown { font-size: 8px; }
+            .big-title { font-size: 2.5rem; letter-spacing: 10px; }
+            .ascii-message { font-size: 10px; }
+            .top-strip span { font-size: 0.9rem; letter-spacing: 4px; }
+            .top-strip, .bottom-strip { height: 20px; }
+            .music-btn { font-size: 0.6rem; padding: 3px 8px; }
         }
 
         @media (max-width: 450px) {
-            .ascii-countdown { font-size: 7px; line-height: 1.2; }
-            .big-title { font-size: 2rem; letter-spacing: 6px; }
-            .ascii-message { font-size: 9px; }
+            .ascii-countdown { font-size: 6px; line-height: 1.1; }
+            .big-title { font-size: 1.8rem; letter-spacing: 6px; }
+            .ascii-message { font-size: 8px; }
         }
     </style>
 </head>
@@ -188,10 +251,8 @@
 
     <!-- MAIN COUNTDOWN -->
     <div class="countdown-wrapper">
-        <!-- BIG QUESTION MARKS -->
         <div class="big-title">???</div>
 
-        <!-- FAT ASCII COUNTDOWN -->
         <pre class="ascii-countdown" id="asciiCountdown">
   ██████   █████   ██   ██  ███████  ███████  ██   ██  ███████  ███████  ███████
   ██   ██  ██  ██  ██   ██  ██      ██       ██   ██  ██      ██       ██
@@ -200,15 +261,17 @@
   ██       █████   ██   ██  ███████  ███████  ██   ██  ███████  ███████  ███████
         </pre>
 
-        <!-- ASCII MESSAGE -->
         <pre class="ascii-message" id="asciiMessage">
 [ counting down to the big moment ]
         </pre>
 
-        <!-- MUSIC PLAYER - NO BUTTONS -->
+        <!-- MUSIC PLAYER - 3 BUTTONS -->
         <div class="music-player">
-            <span class="status" id="musicStatus">[ LOADING ]</span>
-            <span class="track-info" id="trackInfo">song 1 / 3</span>
+            <span class="status" id="musicStatus">[ IDLE ]</span>
+            <button class="music-btn" data-song="0">1</button>
+            <button class="music-btn" data-song="1">2</button>
+            <button class="music-btn" data-song="2">3</button>
+            <span class="track-info" id="trackInfo">off</span>
         </div>
     </div>
 
@@ -217,7 +280,7 @@
 
     <script>
         (function() {
-            // ========== 1 YEAR EXACT COUNTDOWN (STORED) ==========
+            // ========== 1 YEAR EXACT COUNTDOWN ==========
             const STORAGE_KEY = 'oga_countdown_target';
             let targetDate;
 
@@ -237,7 +300,6 @@
             const asciiDisplay = document.getElementById('asciiCountdown');
             const asciiMessage = document.getElementById('asciiMessage');
 
-            // FAT ASCII digits (block style)
             const fatDigits = {
                 '0': [
                     ' ██████ ',
@@ -373,7 +435,6 @@
 
                 combined.push('  [============================================]');
 
-                // Wrap each row in a span for wave effect
                 const wrapped = combined.map((line, index) => {
                     return `<span class="row-${index}">${line}</span>`;
                 }).join('\n');
@@ -394,90 +455,104 @@
             updateAsciiCountdown();
             setInterval(updateAsciiCountdown, 1000);
 
-            // ========== MUSIC - AUTOPLAY, NO BUTTONS ==========
-            const songs = [
-                'Song1.mp3',
-                'Song2.mp3',
-                'Song3.mp3'
-            ];
+            // ========== FLOATING ? MARKS ==========
+            function createFloatingQuestions() {
+                const container = document.body;
+                const symbols = ['?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?'];
+                
+                symbols.forEach((symbol, i) => {
+                    const el = document.createElement('div');
+                    el.className = 'float-question';
+                    el.textContent = symbol;
+                    
+                    // Random position
+                    const left = Math.random() * 90 + 5;
+                    el.style.left = left + '%';
+                    
+                    // Random size
+                    const size = 20 + Math.random() * 60;
+                    el.style.fontSize = size + 'px';
+                    
+                    // Random speed
+                    const duration = 12 + Math.random() * 18;
+                    el.style.animationDuration = duration + 's';
+                    
+                    // Random delay
+                    const delay = Math.random() * 20;
+                    el.style.animationDelay = delay + 's';
+                    
+                    // Random opacity
+                    el.style.opacity = 0.05 + Math.random() * 0.15;
+                    
+                    container.appendChild(el);
+                });
+            }
 
+            createFloatingQuestions();
+
+            // ========== MUSIC - 3 BUTTONS ==========
+            const songs = ['Song1.mp3', 'Song2.mp3', 'Song3.mp3'];
             const audio = new Audio();
-            let currentSongIndex = 0;
-            let isPlaying = false;
+            let currentSongIndex = -1;
 
             const musicStatus = document.getElementById('musicStatus');
             const trackInfo = document.getElementById('trackInfo');
+            const buttons = document.querySelectorAll('.music-btn');
 
             function getSongUrl(index) {
                 return 'https://oga-og.github.io/' + songs[index];
             }
 
-            function loadSong(index) {
-                audio.src = getSongUrl(index);
-                audio.load();
-                trackInfo.textContent = `song ${index + 1} / ${songs.length}`;
-                musicStatus.innerHTML = '[ LOADING ]';
-                musicStatus.style.color = '#ffd700';
-                console.log('Loading:', songs[index]);
-            }
+            function playSong(index) {
+                // Update button styles
+                buttons.forEach((btn, i) => {
+                    btn.classList.toggle('active', i === index);
+                });
 
-            function playSong() {
+                const url = getSongUrl(index);
+                audio.src = url;
+                audio.load();
+                
                 audio.play().then(() => {
-                    isPlaying = true;
+                    currentSongIndex = index;
                     musicStatus.innerHTML = '[ PLAYING ]';
                     musicStatus.style.color = '#00ff88';
-                    console.log('Playing:', songs[currentSongIndex]);
+                    trackInfo.textContent = `song ${index + 1}`;
+                    console.log('Playing:', songs[index]);
                 }).catch(err => {
                     console.warn('Play error:', err);
                     musicStatus.innerHTML = '[ ERROR ]';
                     musicStatus.style.color = '#ff4444';
-                    setTimeout(() => {
-                        if (!isPlaying) nextSong();
-                    }, 3000);
                 });
             }
 
-            function nextSong() {
-                currentSongIndex = (currentSongIndex + 1) % songs.length;
-                loadSong(currentSongIndex);
-                if (isPlaying) playSong();
-            }
-
-            function initAudio() {
-                loadSong(0);
-                const attempt = audio.play();
-                if (attempt !== undefined) {
-                    attempt.then(() => {
-                        isPlaying = true;
-                        musicStatus.innerHTML = '[ PLAYING ]';
-                        musicStatus.style.color = '#00ff88';
-                    }).catch(() => {
-                        musicStatus.innerHTML = '[ CLICK TO PLAY ]';
-                        musicStatus.style.color = '#ffaa00';
-                        document.addEventListener('click', function handler() {
-                            audio.play().then(() => {
-                                isPlaying = true;
-                                musicStatus.innerHTML = '[ PLAYING ]';
-                                musicStatus.style.color = '#00ff88';
-                                document.removeEventListener('click', handler);
-                            }).catch(() => {});
-                        });
-                    });
-                }
-            }
+            buttons.forEach((btn) => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.song);
+                    if (currentSongIndex === index && !audio.paused) {
+                        // If same song is playing, restart it
+                        audio.currentTime = 0;
+                    } else {
+                        playSong(index);
+                    }
+                });
+            });
 
             audio.addEventListener('ended', () => {
-                console.log('Song ended, next...');
-                nextSong();
+                // Auto-play next song when current ends
+                const next = (currentSongIndex + 1) % songs.length;
+                playSong(next);
             });
 
             audio.addEventListener('error', () => {
                 musicStatus.innerHTML = '[ ERROR ]';
                 musicStatus.style.color = '#ff4444';
-                setTimeout(nextSong, 3000);
             });
 
-            initAudio();
+            // Auto-play first song after 1 second
+            setTimeout(() => {
+                playSong(0);
+            }, 1000);
 
             console.log('Countdown target:', targetDate.toISOString());
             console.log('Songs:', songs);
