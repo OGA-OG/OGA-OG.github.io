@@ -15,7 +15,7 @@
         body {
             background-color: black;
             font-family: 'Courier New', monospace;
-            color: #1b1b1b;
+            color: #ffd700;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -280,32 +280,31 @@
 
     <script>
         (function() {
-            // ========== EXACTLY 1 YEAR FROM NOW ==========
-            // This will be 1 year from the moment the page first loads
-            // And it's stored so it doesn't change on refresh
-            const STORAGE_KEY = 'oga_exact_1year_target';
+            // ========== FIXED GLOBAL TIME - SAME FOR EVERYONE ==========
+            // 1 September 2027, 22:20:25 EET = 20:20:25 UTC
+            // This is the SAME for every device, everywhere in the world
+            const TARGET_UTC = Date.UTC(2027, 8, 1, 20, 20, 25); // Month 8 = September
+            
+            // Store in localStorage so it doesn't change on refresh
+            const STORAGE_KEY = 'oga_fixed_global_target';
             let targetDate;
             
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
                 targetDate = new Date(stored);
-                // If stored date is invalid or in the past, reset
-                if (isNaN(targetDate.getTime()) || targetDate.getTime() < Date.now()) {
-                    const now = new Date();
-                    targetDate = new Date(now);
-                    targetDate.setFullYear(targetDate.getFullYear() + 1);
+                // If stored date is different from our fixed date, update it
+                if (targetDate.getTime() !== TARGET_UTC) {
+                    targetDate = new Date(TARGET_UTC);
                     localStorage.setItem(STORAGE_KEY, targetDate.toISOString());
                 }
             } else {
-                // First time - set to exactly 1 year from now
-                const now = new Date();
-                targetDate = new Date(now);
-                targetDate.setFullYear(targetDate.getFullYear() + 1);
+                targetDate = new Date(TARGET_UTC);
                 localStorage.setItem(STORAGE_KEY, targetDate.toISOString());
             }
             
-            console.log('Target (1 year from first load):', targetDate.toISOString());
-            console.log('Target local time:', targetDate.toLocaleString('en-GB', { timeZone: 'Europe/Tallinn' }));
+            console.log('TARGET (UTC):', targetDate.toISOString());
+            console.log('TARGET (EET):', targetDate.toLocaleString('en-GB', { timeZone: 'Europe/Tallinn' }));
+            console.log('Current time (UTC):', new Date().toISOString());
 
             // ========== FAT ASCII COUNTDOWN ==========
             const asciiDisplay = document.getElementById('asciiCountdown');
@@ -564,7 +563,7 @@
                 playSong(0);
             }, 1000);
 
-            console.log('Target (exactly 1 year):', targetDate.toISOString());
+            console.log('FIXED GLOBAL TARGET:', targetDate.toISOString());
             console.log('Songs:', songs);
         })();
     </script>
