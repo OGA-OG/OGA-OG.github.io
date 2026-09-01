@@ -195,11 +195,11 @@
             color: #ffd700;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            opacity: 0.15;
             pointer-events: none;
             z-index: 1;
             text-shadow: 0 0 20px #ffd700;
             animation: floatUp 15s infinite linear;
+            opacity: 0;
         }
 
         @keyframes floatUp {
@@ -280,21 +280,41 @@
 
     <script>
         (function() {
-            // ========== 1 YEAR EXACT COUNTDOWN ==========
-            const STORAGE_KEY = 'oga_countdown_target';
+            // ========== GLOBAL COUNTDOWN (UTC) ==========
+            const STORAGE_KEY = 'oga_countdown_target_utc';
             let targetDate;
 
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
                 targetDate = new Date(stored);
                 if (isNaN(targetDate.getTime()) || targetDate.getTime() < Date.now()) {
-                    targetDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+                    // Set to 1 year from NOW in UTC
+                    const now = new Date();
+                    targetDate = new Date(Date.UTC(
+                        now.getUTCFullYear() + 1,
+                        now.getUTCMonth(),
+                        now.getUTCDate(),
+                        now.getUTCHours(),
+                        now.getUTCMinutes(),
+                        now.getUTCSeconds()
+                    ));
                     localStorage.setItem(STORAGE_KEY, targetDate.toISOString());
                 }
             } else {
-                targetDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+                // Set to 1 year from NOW in UTC
+                const now = new Date();
+                targetDate = new Date(Date.UTC(
+                    now.getUTCFullYear() + 1,
+                    now.getUTCMonth(),
+                    now.getUTCDate(),
+                    now.getUTCHours(),
+                    now.getUTCMinutes(),
+                    now.getUTCSeconds()
+                ));
                 localStorage.setItem(STORAGE_KEY, targetDate.toISOString());
             }
+
+            console.log('Target (UTC):', targetDate.toISOString());
 
             // ========== FAT ASCII COUNTDOWN ==========
             const asciiDisplay = document.getElementById('asciiCountdown');
@@ -455,39 +475,41 @@
             updateAsciiCountdown();
             setInterval(updateAsciiCountdown, 1000);
 
-            // ========== FLOATING ? MARKS ==========
+            // ========== FLOATING ? MARKS (FIXED - NO CLUMPING) ==========
             function createFloatingQuestions() {
                 const container = document.body;
-                const symbols = ['?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?'];
+                const count = 20;
                 
-                symbols.forEach((symbol, i) => {
+                // Create all at once with random positions
+                for (let i = 0; i < count; i++) {
                     const el = document.createElement('div');
                     el.className = 'float-question';
-                    el.textContent = symbol;
+                    el.textContent = '?';
                     
-                    // Random position
-                    const left = Math.random() * 90 + 5;
+                    // Random position - spread evenly
+                    const left = Math.random() * 95 + 2;
                     el.style.left = left + '%';
                     
                     // Random size
-                    const size = 20 + Math.random() * 60;
+                    const size = 15 + Math.random() * 65;
                     el.style.fontSize = size + 'px';
                     
                     // Random speed
-                    const duration = 12 + Math.random() * 18;
+                    const duration = 12 + Math.random() * 20;
                     el.style.animationDuration = duration + 's';
                     
-                    // Random delay
-                    const delay = Math.random() * 20;
+                    // Random delay - stagger them so they don't all start at bottom
+                    const delay = Math.random() * 25;
                     el.style.animationDelay = delay + 's';
                     
                     // Random opacity
                     el.style.opacity = 0.05 + Math.random() * 0.15;
                     
                     container.appendChild(el);
-                });
+                }
             }
 
+            // Call immediately - no waiting
             createFloatingQuestions();
 
             // ========== MUSIC - 3 BUTTONS ==========
@@ -504,7 +526,6 @@
             }
 
             function playSong(index) {
-                // Update button styles
                 buttons.forEach((btn, i) => {
                     btn.classList.toggle('active', i === index);
                 });
@@ -530,7 +551,6 @@
                 btn.addEventListener('click', function() {
                     const index = parseInt(this.dataset.song);
                     if (currentSongIndex === index && !audio.paused) {
-                        // If same song is playing, restart it
                         audio.currentTime = 0;
                     } else {
                         playSong(index);
@@ -539,7 +559,6 @@
             });
 
             audio.addEventListener('ended', () => {
-                // Auto-play next song when current ends
                 const next = (currentSongIndex + 1) % songs.length;
                 playSong(next);
             });
@@ -549,12 +568,11 @@
                 musicStatus.style.color = '#ff4444';
             });
 
-            // Auto-play first song after 1 second
             setTimeout(() => {
                 playSong(0);
             }, 1000);
 
-            console.log('Countdown target:', targetDate.toISOString());
+            console.log('Countdown target (UTC):', targetDate.toISOString());
             console.log('Songs:', songs);
         })();
     </script>
