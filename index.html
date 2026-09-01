@@ -280,31 +280,32 @@
 
     <script>
         (function() {
-            // ========== FIXED COUNTDOWN - 1 September 2026, 22:20:25 EET ==========
-            // EET = UTC+2, so 22:20:25 EET = 20:20:25 UTC
-            // But we want it to be the same for everyone, so we use a fixed UTC timestamp
-            // 1 September 2026, 20:20:25 UTC
-            const TARGET_UTC = Date.UTC(2026, 8, 1, 20, 20, 25); // Month is 0-based, so 8 = September
-            
-            // Store in localStorage so it doesn't change on refresh
-            const STORAGE_KEY = 'oga_fixed_target';
+            // ========== EXACTLY 1 YEAR FROM NOW ==========
+            // This will be 1 year from the moment the page first loads
+            // And it's stored so it doesn't change on refresh
+            const STORAGE_KEY = 'oga_exact_1year_target';
             let targetDate;
             
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
                 targetDate = new Date(stored);
-                // If stored date is different from our fixed date, update it
-                if (targetDate.getTime() !== TARGET_UTC) {
-                    targetDate = new Date(TARGET_UTC);
+                // If stored date is invalid or in the past, reset
+                if (isNaN(targetDate.getTime()) || targetDate.getTime() < Date.now()) {
+                    const now = new Date();
+                    targetDate = new Date(now);
+                    targetDate.setFullYear(targetDate.getFullYear() + 1);
                     localStorage.setItem(STORAGE_KEY, targetDate.toISOString());
                 }
             } else {
-                targetDate = new Date(TARGET_UTC);
+                // First time - set to exactly 1 year from now
+                const now = new Date();
+                targetDate = new Date(now);
+                targetDate.setFullYear(targetDate.getFullYear() + 1);
                 localStorage.setItem(STORAGE_KEY, targetDate.toISOString());
             }
             
-            console.log('Target (fixed):', targetDate.toISOString());
-            console.log('Target local:', targetDate.toLocaleString('en-GB', { timeZone: 'Europe/Tallinn' }));
+            console.log('Target (1 year from first load):', targetDate.toISOString());
+            console.log('Target local time:', targetDate.toLocaleString('en-GB', { timeZone: 'Europe/Tallinn' }));
 
             // ========== FAT ASCII COUNTDOWN ==========
             const asciiDisplay = document.getElementById('asciiCountdown');
@@ -465,12 +466,11 @@
             updateAsciiCountdown();
             setInterval(updateAsciiCountdown, 1000);
 
-            // ========== FLOATING ? MARKS - SPREAD EVENLY ==========
+            // ========== FLOATING ? MARKS ==========
             function createFloatingQuestions() {
                 const container = document.body;
                 const count = 25;
                 
-                // Pre-calculate positions to ensure even spread
                 const positions = [];
                 for (let i = 0; i < count; i++) {
                     positions.push({
@@ -482,7 +482,6 @@
                     });
                 }
                 
-                // Shuffle positions so they don't appear in order
                 for (let i = positions.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [positions[i], positions[j]] = [positions[j], positions[i]];
@@ -503,7 +502,6 @@
                 });
             }
 
-            // Create immediately
             createFloatingQuestions();
 
             // ========== MUSIC - 3 BUTTONS ==========
@@ -566,7 +564,7 @@
                 playSong(0);
             }, 1000);
 
-            console.log('Fixed target:', targetDate.toISOString());
+            console.log('Target (exactly 1 year):', targetDate.toISOString());
             console.log('Songs:', songs);
         })();
     </script>
