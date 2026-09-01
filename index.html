@@ -4,7 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OGA - COUNTDOWN</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== RESET + GLOBAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+            font-family: 'Courier New', monospace;
+            color: #ffd700;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        /* ===== YELLOW STRIPS ===== */
+        .top-strip, .bottom-strip {
+            width: 100%;
+            height: 40px;
+            background-color: #ffd700;
+            flex-shrink: 0;
+        }
+
+        .top-strip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .top-strip span {
+            color: black;
+            font-weight: bold;
+            font-size: 1.4rem;
+            letter-spacing: 6px;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .countdown-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 10px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        /* ===== BIG QUESTION MARKS ===== */
+        .big-title {
+            color: #ffd700;
+            font-size: 4rem;
+            font-weight: bold;
+            letter-spacing: 10px;
+            text-shadow: 0 0 30px #ffd700, 0 0 60px #ffd700;
+            margin-bottom: 20px;
+            animation: glowPulse 1.5s infinite alternate;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 10px #ffd700; }
+            100% { text-shadow: 0 0 40px #ffd700, 0 0 80px #ffd700; }
+        }
+
+        /* ===== FAT COUNTDOWN - FULL SCREEN WIDTH ===== */
+        .ascii-countdown {
+            color: #ffd700;
+            font-size: 18px;
+            line-height: 1.4;
+            white-space: pre;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 8px #ffd700;
+            text-align: center;
+            margin: 10px 0;
+            animation: asciiFloat 2s infinite ease-in-out;
+            width: 100%;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        @keyframes asciiFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); text-shadow: 0 0 25px #ffd700; }
+        }
+
+        .ascii-message {
+            color: #ffd700;
+            font-size: 16px;
+            line-height: 1.6;
+            white-space: pre;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 8px #ffd700;
+            margin-top: 15px;
+            text-align: center;
+            animation: msgFlicker 3s infinite;
+        }
+
+        @keyframes msgFlicker {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 20px #ffd700; }
+        }
+
+        /* ===== MUSIC PLAYER ===== */
+        .music-player {
+            margin-top: 30px;
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid #ffd700;
+            border-radius: 60px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .music-player .status {
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #ffd700;
+        }
+
+        .music-player button {
+            background: #ffd700;
+            color: black;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .music-player button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px #ffd700;
+            background: #ffe44d;
+        }
+
+        .music-player .track-info {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            color: #ffd700;
+        }
+
+        /* ===== RESPONSIVE - MAKE COUNTDOWN BIGGER ON LARGE SCREENS ===== */
+        @media (min-width: 1200px) {
+            .ascii-countdown { font-size: 24px; }
+            .big-title { font-size: 6rem; }
+            .ascii-message { font-size: 20px; }
+        }
+
+        @media (max-width: 700px) {
+            .ascii-countdown { font-size: 12px; }
+            .big-title { font-size: 2.5rem; }
+            .ascii-message { font-size: 12px; }
+            .top-strip span { font-size: 1rem; letter-spacing: 3px; }
+            .top-strip, .bottom-strip { height: 30px; }
+        }
+
+        @media (max-width: 450px) {
+            .ascii-countdown { font-size: 9px; }
+            .big-title { font-size: 1.8rem; letter-spacing: 4px; }
+            .ascii-message { font-size: 10px; }
+        }
+    </style>
 </head>
 <body>
 
@@ -15,22 +196,18 @@
 
     <!-- MAIN COUNTDOWN -->
     <div class="countdown-wrapper">
-        <!-- ASCII TITLE with GLOW animation -->
-        <pre class="ascii-title">
-<span class="glow">   ___   ___   ___   ___   ___   ___   ___   ___   ___   ___   ___   ___</span>
-<span class="glow">  /   \ /   \ /   \ /   \ /   \ /   \ /   \ /   \ /   \ /   \ /   \ /   \</span>
-<span class="glow"> | O   | G   | A   |   C | O   | U   | N   | T   | D   | O   | W   | N   |</span>
-<span class="glow">  \___/ \___/ \___/ \___/ \___/ \___/ \___/ \___/ \___/ \___/ \___/ \___/</span>
-        </pre>
+        <!-- BIG QUESTION MARKS -->
+        <div class="big-title">????????????????????????????????</div>
 
         <!-- ASCII COUNTDOWN DISPLAY -->
         <pre class="ascii-countdown" id="asciiCountdown">
-  _________    _____    ____    ____    _____
- |  _   _  |  |_   _|  |_  _|  |_  _|  |_   _|
- |_/ | | \_|    | |      \ \    / /      | |
-     | |        | |       \ \  / /       | |
-    _| |_      _| |_       \ \/ /       _| |_
-   |_____|    |_____|       \__/       |_____|
+  DAYS     HOURS    MINUTES   SECONDS
+  ----     -----    -------   -------
+ #####     #####     #####     #####
+ #   #     #   #     #   #     #   #
+ #####     #####     #####     #####
+ #   #     #   #     #   #     #   #
+ #####     #####     #####     #####
         </pre>
 
         <!-- ASCII MESSAGE -->
@@ -38,7 +215,7 @@
 [ counting down to the big moment ]
         </pre>
 
-        <!-- MUSIC PLAYER (autoplay) -->
+        <!-- MUSIC PLAYER -->
         <div class="music-player">
             <span class="status" id="musicStatus">[ LOADING ]</span>
             <button id="pauseBtn">PAUSE</button>
@@ -72,6 +249,7 @@
             const asciiDisplay = document.getElementById('asciiCountdown');
             const asciiMessage = document.getElementById('asciiMessage');
 
+            // Simple ASCII digits
             const digitArt = {
                 '0': [
                     ' ##### ',
@@ -228,11 +406,12 @@
             updateAsciiCountdown();
             setInterval(updateAsciiCountdown, 1000);
 
-            // ========== MUSIC PLAYER - AUTO-PLAY FROM GITHUB ==========
+            // ========== MUSIC PLAYER - FIXED FILENAMES ==========
+            // Using lowercase filenames to match your files
             const songs = [
-                'song1.mp3',
-                'song2.mp3',
-                'song3.mp3'
+                'Song1.mp3',
+                'Song2.mp3',
+                'Song3.mp3'
             ];
 
             const audio = new Audio();
@@ -256,6 +435,7 @@
                 trackInfo.textContent = `song ${index + 1} / ${songs.length}`;
                 musicStatus.innerHTML = '[ LOADING ]';
                 musicStatus.style.color = '#ffd700';
+                console.log('Loading song:', url);
             }
 
             function playSong() {
@@ -263,15 +443,17 @@
                     isPlaying = true;
                     musicStatus.innerHTML = '[ PLAYING ]';
                     musicStatus.style.color = '#00ff88';
+                    console.log('Playing song:', audio.src);
                 }).catch(err => {
                     console.warn('Play error:', err);
                     musicStatus.innerHTML = '[ ERROR ]';
                     musicStatus.style.color = '#ff4444';
+                    // Try next song after 3 seconds
                     setTimeout(() => {
                         if (!isPlaying) {
-                            playSong();
+                            nextSong();
                         }
-                    }, 2000);
+                    }, 3000);
                 });
             }
 
@@ -291,9 +473,11 @@
                         isPlaying = true;
                         musicStatus.innerHTML = '[ PLAYING ]';
                         musicStatus.style.color = '#00ff88';
-                    }).catch(() => {
+                    }).catch((err) => {
+                        console.log('Autoplay blocked, waiting for user interaction');
                         musicStatus.innerHTML = '[ CLICK PLAY ]';
                         musicStatus.style.color = '#ffaa00';
+                        // Try again on any click
                         document.addEventListener('click', function autoPlayOnClick() {
                             audio.play().then(() => {
                                 isPlaying = true;
@@ -301,7 +485,7 @@
                                 musicStatus.style.color = '#00ff88';
                                 document.removeEventListener('click', autoPlayOnClick);
                             }).catch(() => {});
-                        }, { once: false });
+                        });
                     });
                 }
             }
@@ -310,7 +494,8 @@
                 nextSong();
             });
 
-            audio.addEventListener('error', () => {
+            audio.addEventListener('error', (e) => {
+                console.error('Audio error:', e);
                 musicStatus.innerHTML = '[ ERROR ]';
                 musicStatus.style.color = '#ff4444';
                 setTimeout(nextSong, 3000);
@@ -336,8 +521,8 @@
 
             initAudio();
 
-            console.log(' Countdown locked to:', targetDate.toISOString());
-            console.log(' Music auto-play from GitHub: song1.mp3, song2.mp3, song3.mp3');
+            console.log('Countdown locked to:', targetDate.toISOString());
+            console.log('Music files:', songs);
         })();
     </script>
 
